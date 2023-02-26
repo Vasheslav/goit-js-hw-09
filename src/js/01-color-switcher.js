@@ -5,24 +5,20 @@ const ref = {
 };
 
 let timerId = null;
-let startBtnOn = false;
 
 ref.startEl.addEventListener('click', onClicStart);
 ref.stopEl.addEventListener('click', onClickStop);
 
 function onClicStart() {
-  if (startBtnOn) {
-    return;
-  }
-
+  console.log();
   changeBodyColor();
   timerId = setInterval(() => changeBodyColor(), 1000);
-  startBtnOn = true;
+  ref.startEl.disabled = true;
 }
 
 function onClickStop() {
   clearInterval(timerId);
-  startBtnOn = false;
+  ref.startEl.disabled = false;
 }
 
 function getRandomHexColor() {
