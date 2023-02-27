@@ -30,7 +30,9 @@ function changeCssStyle() {
 
 inputDateTime.addEventListener('click', openCalendar);
 
-function openCalendar() {
+function openCalendar(e) {
+  e.preventDefault();
+
   flatpickr(inputDateTime, {
     enableTime: true,
     time_24hr: true,
