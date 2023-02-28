@@ -15,8 +15,6 @@ const dataSeconds = document.querySelector('[data-seconds]');
 buttonEl.disabled = true;
 let timerId = null;
 
-changeCssStyle();
-
 function changeCssStyle() {
   timerEl.style.cssText = 'display: flex; gap: 25px';
   fieldEl.forEach(el => {
@@ -28,45 +26,44 @@ function changeCssStyle() {
   });
 }
 
-inputDateTime.addEventListener('click', openCalendar);
+changeCssStyle();
 
-function openCalendar(e) {
-  e.preventDefault();
+let options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  clickOpens: true,
+  onClose(selectedDates) {
+    if (Date.now() > selectedDates[0].getTime()) {
+      Notiflix.Notify.failure('Please choose a date in the future');
+      return;
+    } else {
+      buttonEl.disabled = false;
+    }
+  },
+};
 
-  flatpickr(inputDateTime, {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose(selectedDates) {
-      if (Date.now() > selectedDates[0].getTime()) {
-        Notiflix.Notify.failure('Please choose a date in the future');
-        return;
-      } else {
-        buttonEl.disabled = false;
-      }
+const dataPicer = flatpickr(inputDateTime, options);
 
-      buttonEl.addEventListener('click', startDateTimer);
+buttonEl.addEventListener('click', startDateTimer);
 
-      function startDateTimer() {
-        clearInterval(timerId);
-        buttonEl.disabled = true;
+function startDateTimer() {
+  clearInterval(timerId);
+  buttonEl.disabled = true;
 
-        timerId = setInterval(() => {
-          let differenceTime = selectedDates[0].getTime() - Date.now();
+  timerId = setInterval(() => {
+    let differenceTime = dataPicer.selectedDates[0].getTime() - Date.now();
 
-          dataDays.textContent = convertMs(differenceTime).days;
-          dataHours.textContent = convertMs(differenceTime).hours;
-          dataMinutes.textContent = convertMs(differenceTime).minutes;
-          dataSeconds.textContent = convertMs(differenceTime).seconds;
+    dataDays.textContent = convertMs(differenceTime).days;
+    dataHours.textContent = convertMs(differenceTime).hours;
+    dataMinutes.textContent = convertMs(differenceTime).minutes;
+    dataSeconds.textContent = convertMs(differenceTime).seconds;
 
-          if (differenceTime < 1000) {
-            clearInterval(timerId);
-          }
-        }, 1000);
-      }
-    },
-  });
+    if (differenceTime < 1000) {
+      clearInterval(timerId);
+    }
+  }, 1000);
 }
 
 function addLeadingZero(value) {

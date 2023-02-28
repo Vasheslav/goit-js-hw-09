@@ -30,6 +30,7 @@ function outputOfPromises(e) {
       });
     delay += step;
   }
+  formEl.reset();
 }
 
 function createPromise(position, delay) {

@@ -9,16 +9,20 @@ let timerId = null;
 ref.startEl.addEventListener('click', onClicStart);
 ref.stopEl.addEventListener('click', onClickStop);
 
+ref.stopEl.disabled = true;
+
 function onClicStart() {
   console.log();
   changeBodyColor();
   timerId = setInterval(() => changeBodyColor(), 1000);
   ref.startEl.disabled = true;
+  ref.stopEl.disabled = false;
 }
 
 function onClickStop() {
   clearInterval(timerId);
   ref.startEl.disabled = false;
+  ref.stopEl.disabled = true;
 }
 
 function getRandomHexColor() {
